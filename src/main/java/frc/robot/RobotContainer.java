@@ -12,12 +12,8 @@ import frc.robot.commands.CAS.MemeShoot;
 import frc.robot.commands.CAS.RobotOff;
 import frc.robot.commands.SetSubsystemCommand.*;
 import frc.robot.factories.AutonomousCommandFactory;
-import frc.robot.subsystems.ClimbSubsystem;
-import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.IndexerSubsystem;
-import frc.robot.subsystems.LimelightSubsystem;
-import frc.robot.subsystems.PivotSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.*;
+
 import static frc.robot.Constants.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -56,6 +52,8 @@ public class RobotContainer {
   private ShooterSubsystem m_shooterSubsystem;
   private ClimbSubsystem m_climbSubsystem;
   private PivotSubsystem m_pivotSubsystem;
+
+  private ElevatorSubsystem m_elevatorSubsystem;
   
   /*private static PowerDistribution powerModule = new PowerDistribution(1, ModuleType.kRev);
 
@@ -72,6 +70,7 @@ public class RobotContainer {
     m_shooterSubsystem = ShooterSubsystem.getInstance();
     m_climbSubsystem = ClimbSubsystem.getInstance();
     m_pivotSubsystem = PivotSubsystem.getInstance();
+    m_elevatorSubsystem = ElevatorSubsystem.getInstance();
 
     // Set the scheduler to log Shuffleboard events for command initialize,
     // interrupt, finish
@@ -229,6 +228,11 @@ public class RobotContainer {
     m_controller2.getYButton().whenActive(new RobotOff());    
     m_controller2.getStartButton().whenPressed(m_drivetrainSubsystem::resetOdometry);
     m_controller2.getBackButton().whenPressed(m_drivetrainSubsystem::resetOdometry);
+    m_controller2.getRightBumper()
+            .whenPressed(new SetElevatorCommand(ElevatorSubsystem.ElevatorSubsystemMode.UP));
+
+    m_controller2.getLeftBumper()
+            .whenPressed(new SetElevatorCommand(ElevatorSubsystem.ElevatorSubsystemMode.DOWN));
   }
 
   public void onRobotDisabled() {
